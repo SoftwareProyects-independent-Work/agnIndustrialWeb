@@ -14,6 +14,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mnpavyyy';
 export class ContactComponent {
   formData = {
     name: '',
+    email: '',
     subject: '',
     message: ''
   };
@@ -35,7 +36,7 @@ export class ContactComponent {
 
       if (response.ok) {
         this.status = 'success';
-        this.formData = { name: '', subject: '', message: '' };
+        this.formData = { name: '', email: '', subject: '', message: '' };
       } else {
         this.status = 'error';
       }

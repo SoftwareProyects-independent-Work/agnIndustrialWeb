@@ -123,4 +123,19 @@
   .bar {
      background-color: var(--color-primary) !important;
   }
+  .navbar {
+    padding: 0.85rem 0;
+  }
+  .navbar.scrolled {
+    padding: 0.65rem 0;
+  }
+  .logo {
+    left: var(--container-padding);
+  }
+  .logo-img {
+    height: 42px;
+  }
+  .navbar.scrolled .logo-img {
+    height: 36px;
+  }
 }
