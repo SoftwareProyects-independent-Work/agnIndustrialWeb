@@ -91,6 +91,19 @@
   margin: 0;
 }
 
+.whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-light);
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.whatsapp-link:hover {
+  color: #25D366;
+}
+
 .contact-form {
   display: flex;
   flex-direction: column;
