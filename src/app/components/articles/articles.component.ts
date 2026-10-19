@@ -26,8 +26,6 @@ export class ArticlesComponent implements AfterViewInit {
   private readonly homeDescription = 'Soluciones integrales en tratamiento y purificación de agua para la industria en Uruguay: ablandadores automáticos, tratamiento integral y asesoría técnica. Más de 30 años de experiencia.';
   private readonly canonicalOrigin = new URL(this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href).origin;
   activeSlug = this.slugFromPath();
-  copyMessage = '';
-  sharedSlug: string | null = null;
 
   ngAfterViewInit(): void {
     this.updateMetadata();
@@ -42,7 +40,6 @@ export class ArticlesComponent implements AfterViewInit {
   private navigate(slug: string | null): void {
     if (this.activeSlug === slug) return;
     this.activeSlug = slug;
-    this.copyMessage = '';
     window.history.pushState(null, '', slug ? `/articulos/${slug}` : '/#articulos');
     this.updateMetadata();
   }
@@ -50,19 +47,12 @@ export class ArticlesComponent implements AfterViewInit {
   @HostListener('window:popstate')
   restoreArticle(): void {
     this.activeSlug = this.slugFromPath();
-    this.copyMessage = '';
     this.updateMetadata();
     this.scrollToArticle();
   }
 
-  async copyLink(slug: string): Promise<void> {
-    this.sharedSlug = slug;
-    try {
-      await navigator.clipboard.writeText(`${window.location.origin}/articulos/${slug}`);
-      this.copyMessage = 'Enlace copiado';
-    } catch {
-      this.copyMessage = 'No se pudo copiar. Abrí el artículo y copiá la dirección del navegador.';
-    }
+  whatsappLink(title: string): string {
+    return `https://wa.me/59896916169?text=${encodeURIComponent(`Hola, quisiera consultar sobre el artículo: ${title}`)}`;
   }
 
   private slugFromPath(): string | null {
