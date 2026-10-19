@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, HostListener, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
+import articles from './articles.json';
 
 @Component({
   selector: 'app-articles',
@@ -6,42 +9,82 @@ import { Component } from '@angular/core';
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css'
 })
-export class ArticlesComponent {
-  readonly articles: { title: string; paragraphs: string[] }[] = [
-    {
-      "title": "¿Qué bomba de agua necesito para un pozo?",
-      "paragraphs": [
-        "La elección de la bomba que se necesita para un pozo se debe basar en los siguientes puntos fundamentales A) profundidad del pozo, diferencia de altura y distancia con el lugar de destino del agua.",
-        "B) Caudal del pozo C) Destino del agua a utilizar D) Lógica de diseño de la instalación E) Calidad de agua",
-        "Con estos datos se podrá determinar la presión de trabajo y el caudal de la bomba del pozo a elegir. Un dato no menor es que de acuerdo a la calidad de agua del pozo se recomendará la utilización de un sistema de mejora de su calidad y esto afectará la presión y el caudal en el punto de uso, cualquier sistema de purificación de agua como los ablandadores y dosificadores de cloro tienen requerimientos específicos en cuanto a presión y caudal."
-      ]
-    },
-    {
-      "title": "Cómo elegir una bomba de agua para una chacra",
-      "paragraphs": [
-        "La primera cosa que debemos tener en cuenta es que la bomba del pozo es el corazón del establecimiento permite el suministro para las personas que lo habitan, animales de cría, y todo cuanto se haya plantado en el mismo. Debe cumplir con las características de funcionamiento que cumplan requerimientos en el agua de suministro al establecimiento: presión y caudal. Se deberá contar con tanques de almacenamiento de acuerdo a las necesidades de consumo y preveer la instalación de un sistema de potabilización de agua como ablandadores y dosificación de cloro."
-      ]
-    },
-    {
-      "title": "¿Qué es un ablandador de agua y cuándo lo necesito?",
-      "paragraphs": [
-        "Un ablandador de agua es un equipo de filtración basado en intercambio iónico que retiene calcio y magnesio, transformando el agua dura (con calcio y magnesio) en blanda (sin calcio y magnesio). Su uso está recomendado siempre que se disponga de agua con alta salinidad y con un contenido de dureza (calcio y magnesio) alto, se recomienda para aguas de pozo. La presencia de dureza provoca la formación de depósitos de sarro en todas la instalaciones que funcionen con agua, sobre todo aquellas que intercambian calor, Calentadores o enfriadores de agua, lavarropas, lavavajillas, piscinas, grifería y paredes y pisos de baños y cocinas. Elevada dureza en el agua provoca resequedad en la piel y el cabello, daña la ropa, calefactores , calefones y todos los electrodomésticos que funcionen con agua."
-      ]
-    },
-    {
-      "title": "Agua de pozo con sarro: causas y soluciones",
-      "paragraphs": [
-        "Las aguas de lluvia al filtrarse en el terreno se van cargando de minerales hasta llegar a las napas y acuíferos, es normal que aumente el contenido de sales minerales a medida que realiza su recorrido. Entre los minerales que va adquiriendo se encuentran el calcio y magnesio que integran lo que llamamos “dureza” , que ocasionan daños materiales en instalaciones sanitarias, electrodomésticos, provoca mayor gasto de energía pues disminuye el rendimiento térmico en calderas y calefones, puede ocasionar sequedad en piel y cabello, disminuye el rendimiento en jabones y shampúes. La dureza se puede eliminar por medio de ablandadores de agua o con equipos de ósmosis inversa.",
-        "Los ablandadores son equipos de filtración por intercambio iónico que retienen el calcio y magnesio, cambiándolo por sodio o potasio. Por esta razón consumen cloruro de sodio como regenerante siendo equipos de costo medio y mantenimiento bajo. Los equipos de ósmosis retiene sales minerales mediante un membrana semipermeable que se va saturando a lo largo del tiempo y tendrá que ser cambiada en su totalidad, son equipos de bajo rendimiento con un desperdicio de agua que puede llegar al 60% y con un cotos de medio a alto."
-      ]
-    },
-    {
-      "title": "Cómo mejorar la calidad del agua de pozo",
-      "paragraphs": []
-    },
-    {
-      "title": "Qué tener en cuenta al comprar una chacra con agua de pozo",
-      "paragraphs": []
+export class ArticlesComponent implements AfterViewInit {
+  readonly articles = articles;
+  private readonly document = inject(DOCUMENT);
+  private readonly meta = inject(Meta);
+  private readonly title = inject(Title);
+  private readonly homeTitle = 'AGN Industrial | Tratamiento de Agua Industrial en Uruguay';
+  private readonly homeDescription = 'Soluciones integrales en tratamiento y purificación de agua para la industria en Uruguay: ablandadores automáticos, tratamiento integral y asesoría técnica. Más de 30 años de experiencia.';
+  private readonly canonicalOrigin = new URL(this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href).origin;
+  activeSlug = this.slugFromPath();
+  copyMessage = '';
+
+  ngAfterViewInit(): void {
+    this.updateMetadata();
+    this.scrollToArticle();
+  }
+
+  openArticle(event: Event, slug: string): void {
+    event.preventDefault();
+    this.navigate(this.activeSlug === slug ? null : slug);
+  }
+
+  followArticleLink(event: MouseEvent, slug: string): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    this.navigate(slug);
+  }
+
+  private navigate(slug: string | null): void {
+    if (this.activeSlug === slug) return;
+    this.activeSlug = slug;
+    this.copyMessage = '';
+    window.history.pushState(null, '', slug ? `/articulos/${slug}` : '/#articulos');
+    this.updateMetadata();
+  }
+
+  @HostListener('window:popstate')
+  restoreArticle(): void {
+    this.activeSlug = this.slugFromPath();
+    this.copyMessage = '';
+    this.updateMetadata();
+    this.scrollToArticle();
+  }
+
+  async copyLink(slug: string): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/articulos/${slug}`);
+      this.copyMessage = 'Enlace copiado';
+    } catch {
+      this.copyMessage = 'No se pudo copiar. Podés copiar el enlace de este artículo con el menú del navegador.';
     }
-  ];
+  }
+
+  private slugFromPath(): string | null {
+    const path = this.document.location.pathname.replace(/\/$/, '');
+    return this.articles.find(article => path === `/articulos/${article.slug}`)?.slug ?? null;
+  }
+
+  private scrollToArticle(): void {
+    if (!this.activeSlug || window.location.hash) return;
+    requestAnimationFrame(() => this.document.getElementById(`articulo-${this.activeSlug}`)?.scrollIntoView({ block: 'start' }));
+  }
+
+  private updateMetadata(): void {
+    const article = this.articles.find(item => item.slug === this.activeSlug);
+    const title = article ? `${article.title} | AGN Industrial` : this.homeTitle;
+    const description = article?.description ?? this.homeDescription;
+    const url = `${this.canonicalOrigin}${article ? `/articulos/${article.slug}` : '/'}`;
+    this.title.setTitle(title);
+    this.meta.updateTag({ name: 'description', content: description });
+    this.meta.updateTag({ property: 'og:title', content: title });
+    this.meta.updateTag({ property: 'og:description', content: description });
+    this.meta.updateTag({ property: 'og:url', content: url });
+    this.meta.updateTag({ property: 'og:type', content: article ? 'article' : 'website' });
+    this.meta.updateTag({ name: 'twitter:title', content: title });
+    this.meta.updateTag({ name: 'twitter:description', content: description });
+    this.meta.updateTag({ name: 'robots', content: article && !article.paragraphs.length ? 'noindex, follow' : 'index, follow' });
+    this.document.querySelector('link[rel="canonical"]')?.setAttribute('href', url);
+  }
 }

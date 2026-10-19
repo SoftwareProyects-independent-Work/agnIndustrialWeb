@@ -8,8 +8,8 @@
 
     <div class="articles-grid">
       @for (article of articles; track article.title) {
-        <details class="article-card">
-          <summary>
+        <details class="article-card" [id]="'articulo-' + article.slug" [open]="activeSlug === article.slug">
+          <summary (click)="openArticle($event, article.slug)">
             <span class="article-heading">
               <span class="article-number">Artículo 0{{ $index + 1 }}</span>
               <span class="article-title" role="heading" aria-level="3">{{ article.title }}</span>
@@ -31,6 +31,11 @@
               <p>Estamos preparando el contenido de este artículo.</p>
             }
             <a class="article-contact" href="#contacto">Consultanos sobre este tema <span aria-hidden="true">→</span></a>
+            <div class="article-share">
+              <a [href]="'/articulos/' + article.slug" (click)="followArticleLink($event, article.slug)">Enlace de este artículo</a>
+              <button type="button" (click)="copyLink(article.slug)">Copiar enlace</button>
+              <span role="status">{{ activeSlug === article.slug ? copyMessage : '' }}</span>
+            </div>
           </div>
         </details>
       }
