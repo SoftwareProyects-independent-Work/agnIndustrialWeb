@@ -1,0 +1,28 @@
+.articles { scroll-margin-top: 100px; }
+.articles .section-header { margin-bottom: 2.5rem; }
+.preview-note { margin: 1.5rem 0 0; font-size: .85rem; color: var(--color-text-light); }
+.articles-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
+.article-card { background: var(--color-white); border: 1px solid var(--color-accent); border-radius: 1rem; box-shadow: var(--shadow-sm); overflow: hidden; }
+.article-card[open] { border-color: var(--color-secondary); box-shadow: var(--shadow-md); }
+summary { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.75rem; min-height: 205px; cursor: pointer; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary:hover { background: #f1f8fd; }
+summary:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: -4px; border-radius: 1rem; }
+.article-heading { display: grid; gap: .85rem; }
+.article-number { font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-light); }
+.article-title { font-size: 1.35rem; font-weight: 600; line-height: 1.35; color: var(--color-primary); }
+.article-action { font-size: .9rem; font-weight: 500; color: var(--color-primary); }
+.expand-icon { position: relative; flex: 0 0 36px; height: 36px; border-radius: 50%; background: var(--color-accent); color: var(--color-primary); }
+.expand-icon::before, .expand-icon::after { content: ''; position: absolute; top: 17px; left: 11px; width: 14px; height: 2px; background: currentColor; }
+.expand-icon::after { transform: rotate(90deg); }
+[open] .expand-icon::after { display: none; }
+.when-open, [open] .when-closed { display: none; }
+[open] .when-open { display: inline; }
+.article-body { padding: 1.5rem 1.75rem 1.75rem; border-top: 1px solid var(--color-accent); color: var(--color-text-light); }
+.draft-label { font-size: .8rem; font-weight: 600; color: var(--color-primary); }
+.article-contact { display: inline-block; font-weight: 600; color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
+@media (max-width: 768px) {
+  .articles-grid { grid-template-columns: 1fr; }
+  summary { padding: 1.5rem; min-height: 185px; }
+  .article-body { padding: 1.5rem; }
+}

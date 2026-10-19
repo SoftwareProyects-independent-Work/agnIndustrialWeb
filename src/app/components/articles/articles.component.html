@@ -1,0 +1,33 @@
+<section id="articulos" class="articles" aria-labelledby="articles-title">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2 id="articles-title" class="section-title">Artículos</h2>
+      <p class="section-subtitle">Un espacio para conocer más sobre el agua y su tratamiento. Elegí una pregunta y descubrí el artículo.</p>
+      <p class="preview-note">Vista previa · Títulos y textos de ejemplo</p>
+    </div>
+
+    <div class="articles-grid">
+      @for (question of articles; track $index) {
+        <details class="article-card">
+          <summary>
+            <span class="article-heading">
+              <span class="article-number">Artículo 0{{ $index + 1 }}</span>
+              <span class="article-title" role="heading" aria-level="3">{{ question }}</span>
+              <span class="article-action">
+                <span class="when-closed">Leer artículo</span>
+                <span class="when-open">Cerrar artículo</span>
+              </span>
+            </span>
+            <span class="expand-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="article-body">
+            <p class="draft-label">Artículo de ejemplo</p>
+            <p>Este espacio va a contener el desarrollo de «{{ question }}». Acá podremos compartir explicaciones, recomendaciones e información de interés.</p>
+            <p>El artículo completo se va a poder leer dentro de esta tarjeta, sin salir de la página. Los títulos y textos definitivos se agregarán más adelante.</p>
+            <a class="article-contact" href="#contacto">Consultanos sobre este tema <span aria-hidden="true">→</span></a>
+          </div>
+        </details>
+      }
+    </div>
+  </div>
+</section>
