@@ -2,28 +2,34 @@
   <div class="container">
     <div class="section-header text-center">
       <h2 id="articles-title" class="section-title">Artículos</h2>
-      <p class="section-subtitle">Un espacio para conocer más sobre el agua y su tratamiento. Elegí una pregunta y descubrí el artículo.</p>
-      <p class="preview-note">Vista previa · Títulos y textos de ejemplo</p>
+      <p class="section-subtitle">Agua de pozo, bombas y ablandadores para tu casa, chacra o empresa. Elegí un tema y leé el artículo sin salir de esta página.</p>
+      <p class="preview-note">Vista previa · Artículos en revisión</p>
     </div>
 
     <div class="articles-grid">
-      @for (question of articles; track $index) {
+      @for (article of articles; track article.title) {
         <details class="article-card">
           <summary>
             <span class="article-heading">
               <span class="article-number">Artículo 0{{ $index + 1 }}</span>
-              <span class="article-title" role="heading" aria-level="3">{{ question }}</span>
+              <span class="article-title" role="heading" aria-level="3">{{ article.title }}</span>
               <span class="article-action">
-                <span class="when-closed">Leer artículo</span>
+                <span class="when-closed">{{ article.paragraphs.length ? 'Leer borrador' : 'Pendiente de redacción' }}</span>
                 <span class="when-open">Cerrar artículo</span>
               </span>
             </span>
             <span class="expand-icon" aria-hidden="true"></span>
           </summary>
           <div class="article-body">
-            <p class="draft-label">Artículo de ejemplo</p>
-            <p>Este espacio va a contener el desarrollo de «{{ question }}». Acá podremos compartir explicaciones, recomendaciones e información de interés.</p>
-            <p>El artículo completo se va a poder leer dentro de esta tarjeta, sin salir de la página. Los títulos y textos definitivos se agregarán más adelante.</p>
+            @if (article.paragraphs.length) {
+              <p class="draft-label">Borrador en revisión</p>
+              @for (paragraph of article.paragraphs; track $index) {
+                <p>{{ paragraph }}</p>
+              }
+            } @else {
+              <p class="draft-label">Pendiente de redacción</p>
+              <p>Estamos preparando el contenido de este artículo.</p>
+            }
             <a class="article-contact" href="#contacto">Consultanos sobre este tema <span aria-hidden="true">→</span></a>
           </div>
         </details>
