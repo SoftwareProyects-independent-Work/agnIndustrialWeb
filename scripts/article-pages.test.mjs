@@ -20,6 +20,7 @@ test('Cada dirección sirve título, resumen y contenido sin ejecutar JavaScript
     assert.ok(html.includes(`<link rel="canonical" href="${url}">`));
     assert.ok(html.includes('<base href="/">'));
     for (const paragraph of article.paragraphs) assert.ok(html.includes(`<p>${escapeHtml(paragraph)}</p>`));
+    for (const point of article.points ?? []) assert.ok(html.includes(`<li>${escapeHtml(point)}</li>`));
     if (!article.paragraphs.length) assert.ok(html.includes('content="noindex, follow"'));
   }
   assert.ok(home.includes('<meta property="og:type" content="website">'));

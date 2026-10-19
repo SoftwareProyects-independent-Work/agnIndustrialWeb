@@ -3,41 +3,41 @@
     <div class="section-header text-center">
       <h2 id="articles-title" class="section-title">Artículos</h2>
       <p class="section-subtitle">Agua de pozo, bombas y ablandadores para tu casa, chacra o empresa. Elegí un tema y leé el artículo sin salir de esta página.</p>
-      <p class="preview-note">Vista previa · Artículos en revisión</p>
     </div>
 
     <div class="articles-grid">
-      @for (article of articles; track article.title) {
-        <details class="article-card" [id]="'articulo-' + article.slug" [open]="activeSlug === article.slug">
-          <summary (click)="openArticle($event, article.slug)">
-            <span class="article-heading">
-              <span class="article-number">Artículo 0{{ $index + 1 }}</span>
+      @for (article of articles; track article.slug) {
+        <article class="article-card" [id]="'articulo-' + article.slug" [class.is-open]="activeSlug === article.slug">
+          <button class="share-button" type="button" (click)="copyLink(article.slug)"
+            [attr.aria-label]="'Copiar enlace para compartir: ' + article.title"
+            [title]="sharedSlug === article.slug && copyMessage ? copyMessage : 'Compartir artículo'">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+          </button>
+          <span class="sr-only" role="status">{{ sharedSlug === article.slug ? copyMessage : '' }}</span>
+          <details [open]="activeSlug === article.slug">
+            <summary (click)="openArticle($event, article.slug)">
               <span class="article-title" role="heading" aria-level="3">{{ article.title }}</span>
-              <span class="article-action">
-                <span class="when-closed">{{ article.paragraphs.length ? 'Leer borrador' : 'Pendiente de redacción' }}</span>
-                <span class="when-open">Cerrar artículo</span>
-              </span>
-            </span>
-            <span class="expand-icon" aria-hidden="true"></span>
-          </summary>
-          <div class="article-body">
-            @if (article.paragraphs.length) {
-              <p class="draft-label">Borrador en revisión</p>
-              @for (paragraph of article.paragraphs; track $index) {
-                <p>{{ paragraph }}</p>
+              <span class="expand-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="article-body">
+              @if (article.paragraphs.length) {
+                @for (paragraph of article.paragraphs; track $index) {
+                  <p>{{ paragraph }}</p>
+                  @if ($first && article.points?.length) {
+                    <ol class="article-points" type="A">
+                      @for (point of article.points; track $index) {
+                        <li>{{ point }}</li>
+                      }
+                    </ol>
+                  }
+                }
+              } @else {
+                <p>Estamos preparando el contenido de este artículo.</p>
               }
-            } @else {
-              <p class="draft-label">Pendiente de redacción</p>
-              <p>Estamos preparando el contenido de este artículo.</p>
-            }
-            <a class="article-contact" href="#contacto">Consultanos sobre este tema <span aria-hidden="true">→</span></a>
-            <div class="article-share">
-              <a [href]="'/articulos/' + article.slug" (click)="followArticleLink($event, article.slug)">Enlace de este artículo</a>
-              <button type="button" (click)="copyLink(article.slug)">Copiar enlace</button>
-              <span role="status">{{ activeSlug === article.slug ? copyMessage : '' }}</span>
+              <a class="article-contact" href="#contacto">Consultanos sobre este tema <span aria-hidden="true">→</span></a>
             </div>
-          </div>
-        </details>
+          </details>
+        </article>
       }
     </div>
   </div>

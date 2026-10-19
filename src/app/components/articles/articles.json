@@ -2,12 +2,18 @@
   {
     "title": "¿Qué bomba de agua necesito para un pozo?",
     "paragraphs": [
-      "La elección de la bomba que se necesita para un pozo se debe basar en los siguientes puntos fundamentales A) profundidad del pozo, diferencia de altura y distancia con el lugar de destino del agua.",
-      "B) Caudal del pozo C) Destino del agua a utilizar D) Lógica de diseño de la instalación E) Calidad de agua",
+      "La elección de la bomba que se necesita para un pozo se debe basar en los siguientes puntos fundamentales:",
       "Con estos datos se podrá determinar la presión de trabajo y el caudal de la bomba del pozo a elegir. Un dato no menor es que de acuerdo a la calidad de agua del pozo se recomendará la utilización de un sistema de mejora de su calidad y esto afectará la presión y el caudal en el punto de uso, cualquier sistema de purificación de agua como los ablandadores y dosificadores de cloro tienen requerimientos específicos en cuanto a presión y caudal."
     ],
     "slug": "bomba-para-pozo",
-    "description": "Qué datos tener en cuenta para elegir una bomba de pozo: profundidad, distancia, caudal y uso del agua."
+    "description": "Qué datos tener en cuenta para elegir una bomba de pozo: profundidad, distancia, caudal y uso del agua.",
+    "points": [
+      "Profundidad del pozo, diferencia de altura y distancia con el lugar de destino del agua.",
+      "Caudal del pozo.",
+      "Destino del agua a utilizar.",
+      "Lógica de diseño de la instalación.",
+      "Calidad del agua."
+    ]
   },
   {
     "title": "Cómo elegir una bomba de agua para una chacra",

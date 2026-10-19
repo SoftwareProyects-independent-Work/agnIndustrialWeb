@@ -3,6 +3,14 @@ import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import articles from './articles.json';
 
+interface Article {
+  title: string;
+  slug: string;
+  description: string;
+  paragraphs: string[];
+  points?: string[];
+}
+
 @Component({
   selector: 'app-articles',
   standalone: true,
@@ -10,7 +18,7 @@ import articles from './articles.json';
   styleUrl: './articles.component.css'
 })
 export class ArticlesComponent implements AfterViewInit {
-  readonly articles = articles;
+  readonly articles: Article[] = articles;
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
   private readonly title = inject(Title);
@@ -19,6 +27,7 @@ export class ArticlesComponent implements AfterViewInit {
   private readonly canonicalOrigin = new URL(this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href).origin;
   activeSlug = this.slugFromPath();
   copyMessage = '';
+  sharedSlug: string | null = null;
 
   ngAfterViewInit(): void {
     this.updateMetadata();
@@ -28,12 +37,6 @@ export class ArticlesComponent implements AfterViewInit {
   openArticle(event: Event, slug: string): void {
     event.preventDefault();
     this.navigate(this.activeSlug === slug ? null : slug);
-  }
-
-  followArticleLink(event: MouseEvent, slug: string): void {
-    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    this.navigate(slug);
   }
 
   private navigate(slug: string | null): void {
@@ -53,11 +56,12 @@ export class ArticlesComponent implements AfterViewInit {
   }
 
   async copyLink(slug: string): Promise<void> {
+    this.sharedSlug = slug;
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/articulos/${slug}`);
       this.copyMessage = 'Enlace copiado';
     } catch {
-      this.copyMessage = 'No se pudo copiar. Podés copiar el enlace de este artículo con el menú del navegador.';
+      this.copyMessage = 'No se pudo copiar. Abrí el artículo y copiá la dirección del navegador.';
     }
   }
 

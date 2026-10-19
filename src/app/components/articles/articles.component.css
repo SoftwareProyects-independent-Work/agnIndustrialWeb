@@ -1,34 +1,31 @@
-.articles { scroll-margin-top: 100px; }
+.articles, .article-card { scroll-margin-top: 100px; }
 .articles .section-header { margin-bottom: 2.5rem; }
-.preview-note { margin: 1.5rem 0 0; font-size: .85rem; color: var(--color-text-light); }
 .articles-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
-.article-card { background: var(--color-white); border: 1px solid var(--color-accent); border-radius: 1rem; box-shadow: var(--shadow-sm); overflow: hidden; }
-.article-card[open] { border-color: var(--color-secondary); box-shadow: var(--shadow-md); }
-.article-card { scroll-margin-top: 100px; }
-.article-share { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-top: 1.5rem; font-size: .9rem; }
-.article-share a { text-decoration: underline; text-underline-offset: 3px; }
-.article-share button { padding: .5rem .8rem; border: 1px solid var(--color-primary); border-radius: .5rem; background: var(--color-white); color: var(--color-primary); font: inherit; cursor: pointer; }
-.article-share button:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 3px; }
-.article-share [role=status] { flex-basis: 100%; }
-summary { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.75rem; min-height: 205px; cursor: pointer; list-style: none; }
+.article-card { position: relative; background: var(--color-white); border: 1px solid var(--color-accent); border-radius: 1rem; box-shadow: var(--shadow-sm); overflow: hidden; }
+.article-card.is-open { border-color: var(--color-secondary); box-shadow: var(--shadow-md); }
+summary { position: relative; display: flex; align-items: center; padding: 1.75rem 7.5rem 1.75rem 1.75rem; min-height: 132px; cursor: pointer; list-style: none; }
 summary::-webkit-details-marker { display: none; }
 summary:hover { background: #f1f8fd; }
 summary:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: -4px; border-radius: 1rem; }
-.article-heading { display: grid; gap: .85rem; }
-.article-number { font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-light); }
 .article-title { font-size: 1.35rem; font-weight: 600; line-height: 1.35; color: var(--color-primary); }
-.article-action { font-size: .9rem; font-weight: 500; color: var(--color-primary); }
-.expand-icon { position: relative; flex: 0 0 36px; height: 36px; border-radius: 50%; background: var(--color-accent); color: var(--color-primary); }
-.expand-icon::before, .expand-icon::after { content: ''; position: absolute; top: 17px; left: 11px; width: 14px; height: 2px; background: currentColor; }
+.expand-icon, .share-button { position: absolute; top: 1.75rem; width: 40px; height: 40px; border-radius: 50%; color: var(--color-primary); }
+.expand-icon { right: 4.5rem; background: var(--color-accent); }
+.expand-icon::before, .expand-icon::after { content: ''; position: absolute; top: 19px; left: 13px; width: 14px; height: 2px; background: currentColor; }
 .expand-icon::after { transform: rotate(90deg); }
 [open] .expand-icon::after { display: none; }
-.when-open, [open] .when-closed { display: none; }
-[open] .when-open { display: inline; }
+.share-button { right: 1.5rem; z-index: 1; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; }
+.share-button:hover { background: var(--color-accent); }
+.share-button:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .article-body { padding: 1.5rem 1.75rem 1.75rem; border-top: 1px solid var(--color-accent); color: var(--color-text-light); }
-.draft-label { font-size: .8rem; font-weight: 600; color: var(--color-primary); }
+.article-points { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+.article-points li { padding-left: .25rem; margin-bottom: .6rem; }
 .article-contact { display: inline-block; font-weight: 600; color: var(--color-primary); text-decoration: underline; text-underline-offset: 4px; }
 @media (max-width: 768px) {
   .articles-grid { grid-template-columns: 1fr; }
-  summary { padding: 1.5rem; min-height: 185px; }
+  summary { padding: 1.5rem 7rem 1.5rem 1.5rem; }
+  .expand-icon, .share-button { top: 1.5rem; }
+  .share-button { right: 1.25rem; }
+  .expand-icon { right: 4rem; }
   .article-body { padding: 1.5rem; }
 }

@@ -39,9 +39,9 @@ for (const article of articles) {
   // Visible fallback for readers and crawlers without JavaScript. Angular replaces
   // this content with the complete landing page and opens the selected card.
   const paragraphs = article.paragraphs.length
-    ? article.paragraphs.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('\n')
+    ? article.paragraphs.map((paragraph, index) => `<p>${escapeHtml(paragraph)}</p>${index === 0 && article.points?.length ? `<ol type="A">${article.points.map(point => `<li>${escapeHtml(point)}</li>`).join('')}</ol>` : ''}`).join('\n')
     : '<p>Estamos preparando el contenido de este artículo.</p>';
-  const fallback = `<main class="container"><article><p>AGN Industrial · Artículos</p><h1>${escapeHtml(article.title)}</h1><p>${article.paragraphs.length ? 'Borrador en revisión' : 'Pendiente de redacción'}</p>${paragraphs}<p><a href="/#articulos">Ver todos los artículos</a></p></article></main>`;
+  const fallback = `<main class="container"><article><p>AGN Industrial · Artículos</p><h1>${escapeHtml(article.title)}</h1>${paragraphs}<p><a href="/#articulos">Ver todos los artículos</a></p></article></main>`;
   html = html.replace(/<app-root><\/app-root>/, () => `<app-root>${fallback}</app-root>`);
   await writeFile(resolve(output, 'articulos', `${article.slug}.html`), html);
 }
