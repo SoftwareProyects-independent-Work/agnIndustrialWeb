@@ -6,7 +6,7 @@
     </div>
 
     <div class="articles-grid">
-      @for (article of articles; track article.slug) {
+      @for (article of visibleArticles; track article.slug) {
         <article class="article-card" [id]="'articulo-' + article.slug" [class.is-open]="activeSlug === article.slug">
           <details [open]="activeSlug === article.slug">
             <summary (click)="openArticle($event, article.slug)">

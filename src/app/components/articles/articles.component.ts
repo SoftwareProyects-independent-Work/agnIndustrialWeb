@@ -19,6 +19,7 @@ interface Article {
 })
 export class ArticlesComponent implements AfterViewInit {
   readonly articles: Article[] = articles;
+  readonly visibleArticles = this.articles.filter(article => article.paragraphs.some(paragraph => paragraph.trim()));
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
   private readonly title = inject(Title);
