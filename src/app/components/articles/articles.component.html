@@ -16,11 +16,11 @@
             <div class="article-body">
               @if (article.paragraphs.length) {
                 @for (paragraph of article.paragraphs; track $index) {
-                  <p>{{ paragraph }}</p>
+                  <p [innerHTML]="formatText(paragraph)"></p>
                   @if ($first && article.points?.length) {
                     <ol class="article-points" type="A">
                       @for (point of article.points; track $index) {
-                        <li>{{ point }}</li>
+                        <li [innerHTML]="formatText(point)"></li>
                       }
                     </ol>
                   }

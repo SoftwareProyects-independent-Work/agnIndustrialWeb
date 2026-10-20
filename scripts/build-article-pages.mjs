@@ -9,6 +9,7 @@ const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[character]);
 const seen = new Set();
+const formatText = text => escapeHtml(text).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 await mkdir(resolve(output, 'articulos'), { recursive: true });
 
 for (const article of articles) {
@@ -16,7 +17,7 @@ for (const article of articles) {
     throw new Error(`Dirección de artículo inválida o duplicada: ${article.slug}`);
   }
   seen.add(article.slug);
-  const title = escapeHtml(`${article.title} | AGN Industrial`);
+  const title = escapeHtml(`${article.title} | AGNIndustrial`);
   const description = escapeHtml(article.description);
   const url = `${origin}/articulos/${article.slug}`;
   let html = template.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
@@ -39,9 +40,9 @@ for (const article of articles) {
   // Visible fallback for readers and crawlers without JavaScript. Angular replaces
   // this content with the complete landing page and opens the selected card.
   const paragraphs = article.paragraphs.length
-    ? article.paragraphs.map((paragraph, index) => `<p>${escapeHtml(paragraph)}</p>${index === 0 && article.points?.length ? `<ol type="A">${article.points.map(point => `<li>${escapeHtml(point)}</li>`).join('')}</ol>` : ''}`).join('\n')
+    ? article.paragraphs.map((paragraph, index) => `<p>${formatText(paragraph)}</p>${index === 0 && article.points?.length ? `<ol type="A">${article.points.map(point => `<li>${formatText(point)}</li>`).join('')}</ol>` : ''}`).join('\n')
     : '<p>Estamos preparando el contenido de este artículo.</p>';
-  const fallback = `<main class="container"><article><p>AGN Industrial · Artículos</p><h1>${escapeHtml(article.title)}</h1>${paragraphs}<p><a href="/#articulos">Ver todos los artículos</a></p></article></main>`;
+  const fallback = `<main class="container"><article><p><strong>AGNIndustrial</strong> · Artículos</p><h1>${escapeHtml(article.title)}</h1>${paragraphs}<p><a href="/#articulos">Ver todos los artículos</a></p></article></main>`;
   html = html.replace(/<app-root><\/app-root>/, () => `<app-root>${fallback}</app-root>`);
   await writeFile(resolve(output, 'articulos', `${article.slug}.html`), html);
 }

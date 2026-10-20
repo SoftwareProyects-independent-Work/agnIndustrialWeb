@@ -23,7 +23,7 @@ export class ArticlesComponent implements AfterViewInit {
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
   private readonly title = inject(Title);
-  private readonly homeTitle = 'AGN Industrial | Tratamiento de Agua Industrial en Uruguay';
+  private readonly homeTitle = 'AGNIndustrial | Tratamiento de Agua Industrial en Uruguay';
   private readonly homeDescription = 'Soluciones integrales en tratamiento y purificación de agua para la industria en Uruguay: ablandadores automáticos, tratamiento integral y asesoría técnica. Más de 30 años de experiencia.';
   private readonly canonicalOrigin = new URL(this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href).origin;
   activeSlug = this.slugFromPath();
@@ -56,6 +56,13 @@ export class ArticlesComponent implements AfterViewInit {
     return `https://wa.me/59896916169?text=${encodeURIComponent(`Hola, quisiera consultar sobre el artículo: ${title}`)}`;
   }
 
+  formatText(text: string): string {
+    const escaped = text.replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]!);
+    return escaped.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
+
   private slugFromPath(): string | null {
     const path = this.document.location.pathname.replace(/\/$/, '');
     return this.articles.find(article => path === `/articulos/${article.slug}`)?.slug ?? null;
@@ -68,7 +75,7 @@ export class ArticlesComponent implements AfterViewInit {
 
   private updateMetadata(): void {
     const article = this.articles.find(item => item.slug === this.activeSlug);
-    const title = article ? `${article.title} | AGN Industrial` : this.homeTitle;
+    const title = article ? `${article.title} | AGNIndustrial` : this.homeTitle;
     const description = article?.description ?? this.homeDescription;
     const url = `${this.canonicalOrigin}${article ? `/articulos/${article.slug}` : '/'}`;
     this.title.setTitle(title);

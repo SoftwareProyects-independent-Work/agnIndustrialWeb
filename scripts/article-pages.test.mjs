@@ -9,18 +9,21 @@ const origin = new URL(home.match(/<link rel="canonical" href="([^"]+)"/)[1]).or
 const escapeHtml = value => value.replace(/[&<>"']/g, character => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 })[character]);
+const formatText = text => escapeHtml(text).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 
 test('Cada dirección sirve título, resumen y contenido sin ejecutar JavaScript', async () => {
   for (const article of articles) {
     const html = await readFile(`${output}/articulos/${article.slug}.html`, 'utf8');
     const url = `${origin}/articulos/${article.slug}`;
-    assert.ok(html.includes(`<title>${escapeHtml(article.title)} | AGN Industrial</title>`));
+    assert.ok(html.includes(`<title>${escapeHtml(article.title)} | AGNIndustrial</title>`));
     assert.ok(html.includes(`<meta property="og:description" content="${escapeHtml(article.description)}">`));
     assert.ok(html.includes(`<meta property="og:url" content="${url}">`));
     assert.ok(html.includes(`<link rel="canonical" href="${url}">`));
     assert.ok(html.includes('<base href="/">'));
-    for (const paragraph of article.paragraphs) assert.ok(html.includes(`<p>${escapeHtml(paragraph)}</p>`));
-    for (const point of article.points ?? []) assert.ok(html.includes(`<li>${escapeHtml(point)}</li>`));
+    for (const paragraph of article.paragraphs) assert.ok(html.includes(`<p>${formatText(paragraph)}</p>`));
+    for (const point of article.points ?? []) assert.ok(html.includes(`<li>${formatText(point)}</li>`));
+    if (article.paragraphs.length) assert.ok(html.includes('<strong>AGNIndustrial</strong>'));
+    assert.ok(!html.includes('AGN Industrial'));
     if (!article.paragraphs.length) assert.ok(html.includes('content="noindex, follow"'));
   }
   assert.ok(home.includes('<meta property="og:type" content="website">'));
